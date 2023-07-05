@@ -14,6 +14,17 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true,
     },
-})
+    img: {
+        type: String,
+    },
+    subscribers:{
+        type: Number,
+        default: 0,
+    },
+    subscribedUsers:{
+        type: [String],
+    }
+}, {timestamps: true});
+
+export default mongoose.model('User', UserSchema);
