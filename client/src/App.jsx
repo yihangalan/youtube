@@ -1,35 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import styled, {ThemeProvider} from "styled-components";
+import Menu from "./components/Menu";
+import Navbar from "./components/Navbar";
+import {darkTheme, lightTheme} from "./utils/Theme.js";
+import {useEffect, useState} from "react";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import Home from "./pages/Home.jsx";
+import Video from "./pages/Video.jsx";
+
+const Container = styled.div`
+        display: flex;
+        
+    `
+
+const Main = styled.div`
+      flex: 7;
+      background-color: ${({theme})=>theme.bg};
+      height: 100vh;
+      
+      
+        
+    `
+const Wrapper = styled.div`
+        
+    `
+
 
 function App() {
-  const [count, setCount] = useState(0)
+    const [darkMode, setDarkMode] = useState(() => {
+        const savedDarkMode = localStorage.getItem('darkMode');
+        return savedDarkMode ? JSON.parse(savedDarkMode) : true;
+    });
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    }, [darkMode]);
+
+    return (
+      <ThemeProvider theme={darkMode?darkTheme:lightTheme}>
+          <Navbar/>
+        <Container>
+            <BrowserRouter>
+                <div style={{width: "230px"}}></div>
+                <Menu darkMode={darkMode} setDarkMode={setDarkMode}/>
+                <Main>
+                    <Wrapper>
+                        <Routes>
+                            <Route path='/'>
+                                <Route index element={<Home></Home>}></Route>
+                                <Route path='video'>
+                                    <Route path=':id' element={<Video></Video>}></Route>
+                                </Route>
+                            </Route>
+                        </Routes>
+                    </Wrapper>
+                </Main>
+            </BrowserRouter>
+        </Container>
+      </ThemeProvider>
+    )
 }
 
 export default App
