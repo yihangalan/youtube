@@ -2,7 +2,8 @@ import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined.js";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import youtube from "../img/youtube.png";
-
+import {Link} from "react-router-dom";
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 
 
 const Container = styled.div`
@@ -64,26 +65,48 @@ const Logo = styled.div`
       align-items: center;
       gap: 5px;
       font-weight: bold;
-  
-    `
+`
 const Img = styled.img`
         height: 30px;
-    `
-export default function Navbar(){
+`
+const MenuButton = styled.div`
+  margin-right: 20px;
+  margin-left: 5px;
+  padding: 8px;
+  border-radius: 50%;
+  &:hover{
+    background-color: ${({theme})=>theme.soft};
+    
+  }
+`
+
+
+export default function Navbar({switchmenubutton, setSwitchmenubutton}){
+
     return(
         <Container>
             <Wrapper>
-                <Logo>
-                    <Img src={youtube}></Img>
-                    YouTube
-                </Logo>
+
+                <div style={{display:"flex", alignItems:"center"}}>
+                    <MenuButton onClick={()=>setSwitchmenubutton(!switchmenubutton)}>
+                        <MenuOutlinedIcon></MenuOutlinedIcon>
+                    </MenuButton>
+                    <Link to={'/'} style={{textDecoration: "none", color: "inherit"}}>
+                        <Logo>
+                            <Img src={youtube}></Img>
+                            YouTube
+                        </Logo>
+                    </Link>
+                </div>
                 <Search>
                     <Input placeholder="Search"></Input>
                     <SearchOutlinedIcon></SearchOutlinedIcon>
                 </Search>
-                <Button>
-                    <AccountCircleOutlinedIcon/>SIGN IN
-                </Button>
+                <Link to={"/signin"}>
+                    <Button>
+                        <AccountCircleOutlinedIcon/>SIGN IN
+                    </Button>
+                </Link>
             </Wrapper>
         </Container>
     )

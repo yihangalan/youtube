@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import youtube from "../img/youtube.png"
 import HomeIcon from '@mui/icons-material/Home';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import SubscriptionsOutlinedIcon from '@mui/icons-material/SubscriptionsOutlined';
@@ -16,6 +15,7 @@ import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ModeNightOutlinedIcon from '@mui/icons-material/ModeNightOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import {Link} from "react-router-dom";
 
 const Container = styled.div`
       flex: 1;
@@ -26,8 +26,8 @@ const Container = styled.div`
       position: fixed;
       left: 0;
       top: 56px;
-      width: 230px;
-      min-width: 230px;
+      width: ${({switchmenubutton})=>switchmenubutton==="false" ? "0px":"230px"};
+      min-width:${({switchmenubutton})=>switchmenubutton==="false" ? "0px":"230px"};
       overflow: scroll;
       overflow-x: hidden;
       &::-webkit-scrollbar {
@@ -41,19 +41,38 @@ const Container = styled.div`
         border-radius: 10px;
       }
       overscroll-behavior-x: contain;
+      display: ${({switchmenubutton})=>switchmenubutton==="false" && "none"};
     `
+
+const SmallContainer = styled.div`
+  display: ${({switchmenubutton})=>switchmenubutton==="true" && "none"};
+  background-color: ${({theme})=>theme.bgLighter};
+  color: ${({theme})=>theme.text};
+  font-size: 14px;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 56px;
+  padding: 18px 20px;
+  
+`
 
 const Wrapper = styled.div`
-      padding: 18px 26px;
-    `
+  padding: 18px 26px;
+`
 
 const Item = styled.div`
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      cursor: pointer;
-      padding: 7.5px 0;
-    `
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  padding: 7.5px 0;
+  &:hover{
+    background-color: ${({type, theme})=>type !== "last" && theme.soft}}
+    border-radius: 10px;
+  }
+  
+`
 
 const Hr = styled.hr`
       margin: 15px 0;
@@ -83,84 +102,118 @@ const Title = styled.h2`
       margin-bottom: 20px;
 `
 
-export default function Menu({darkMode, setDarkMode}){
+
+
+export default function Menu({darkMode, setDarkMode, switchmenubutton}){
 
     return(
-        <Container>
-            <Wrapper>
-                <Item>
-                    <HomeIcon/>
-                    Home
-                </Item>
-                <Item>
-                    <ExploreOutlinedIcon/>
-                    Explore
-                </Item>
-                <Item>
-                    <SubscriptionsOutlinedIcon/>
-                    Subscriptions
-                </Item>
-                <Hr/>
-                <Item>
-                    <VideoLibraryOutlinedIcon/>
-                    Library
-                </Item>
-                <Item>
-                    <HistoryIcon/>
-                    History
-                </Item>
-                <Hr/>
-                <Login>
-                    Sign in to like videos, comment, and subscribe.
-                    <Button><AccountCircleOutlinedIcon/>SIGN IN</Button>
-                </Login>
-                <Hr/>
-                <Title>BEST OF YOUTUBE</Title>
+        <div>
 
+            <Container switchmenubutton={switchmenubutton.toString()}>
+                <Wrapper>
+                    <Link to={"/"} style={{textDecoration:"none", color: "inherit"}}>
+                        <Item>
+                            <HomeIcon/>
+                            Home
+                        </Item>
+                    </Link>
+                    <Item>
+                        <ExploreOutlinedIcon/>
+                        Explore
+                    </Item>
+                    <Item>
+                        <SubscriptionsOutlinedIcon/>
+                        Subscriptions
+                    </Item>
+                    <Hr/>
+                    <Item>
+                        <VideoLibraryOutlinedIcon/>
+                        Library
+                    </Item>
+                    <Item>
+                        <HistoryIcon/>
+                        History
+                    </Item>
+                    <Hr/>
+                    <Login>
+                        Sign in to like videos, comment, and subscribe.
+                        <Link to={"/signin"}>
+                            <Button><AccountCircleOutlinedIcon/>SIGN IN</Button>
+                        </Link>
+                    </Login>
+                    <Hr/>
+                    <Title>BEST OF YOUTUBE</Title>
+
+                    <Item>
+                        <MusicNoteOutlinedIcon/>
+                        Music
+                    </Item>
+                    <Item>
+                        <EmojiEventsOutlinedIcon/>
+                        Sports
+                    </Item>
+                    <Item>
+                        <SportsEsportsOutlinedIcon/>
+                        Gaming
+                    </Item>
+                    <Item>
+                        <MovieCreationOutlinedIcon/>
+                        Movies
+                    </Item>
+                    <Item>
+                        <ArticleOutlinedIcon/>
+                        News
+                    </Item>
+                    <Item>
+                        <LiveTvIcon/>
+                        Live
+                    </Item>
+                    <Hr/>
+                    <Item>
+                        <SettingsOutlinedIcon/>
+                        Settings
+                    </Item>
+                    <Item>
+                        <FlagOutlinedIcon/>
+                        Report
+                    </Item>
+                    <Item>
+                        <HelpOutlineIcon/>
+                        Help
+                    </Item>
+                    <Item onClick={() => setDarkMode(!darkMode)}>
+                        <ModeNightOutlinedIcon/>
+                        {darkMode?"Light Mode":"Dark Mode"}
+                    </Item>
+                    <Item type="last" style={{height:"30px"}}>
+                    </Item>
+                </Wrapper>
+            </Container>
+
+            <SmallContainer switchmenubutton={switchmenubutton.toString()}>
+                <Link to={"/"} style={{textDecoration:"none", color: "inherit"}}>
+                    <Item switchmenubutton={switchmenubutton.toString()}>
+                        <HomeIcon style={{padding: "0px 8px"}}/>
+                    </Item>
+                </Link>
                 <Item>
-                    <MusicNoteOutlinedIcon/>
-                    Music
+                    <ExploreOutlinedIcon style={{padding: "0px 8px"}}/>
                 </Item>
                 <Item>
-                    <EmojiEventsOutlinedIcon/>
-                    Sports
-                </Item>
-                <Item>
-                    <SportsEsportsOutlinedIcon/>
-                    Gaming
-                </Item>
-                <Item>
-                    <MovieCreationOutlinedIcon/>
-                    Movies
-                </Item>
-                <Item>
-                    <ArticleOutlinedIcon/>
-                    News
-                </Item>
-                <Item>
-                    <LiveTvIcon/>
-                    Live
+                    <SubscriptionsOutlinedIcon style={{padding: "0px 8px"}}/>
                 </Item>
                 <Hr/>
                 <Item>
-                    <SettingsOutlinedIcon/>
-                    Settings
+                    <VideoLibraryOutlinedIcon style={{padding: "0px 8px"}}/>
                 </Item>
                 <Item>
-                    <FlagOutlinedIcon/>
-                    Report
+                    <HistoryIcon style={{padding: "0px 8px"}}/>
                 </Item>
-                <Item>
-                    <HelpOutlineIcon/>
-                    Help
-                </Item>
+                <Hr/>
                 <Item onClick={() => setDarkMode(!darkMode)}>
-                    <ModeNightOutlinedIcon/>
-                    Light Mode
+                    <ModeNightOutlinedIcon style={{padding: "0px 8px"}}/>
                 </Item>
-                <Item style={{height:"30px"}}>
-                </Item>
-            </Wrapper>
-        </Container>
+            </SmallContainer>
+        </div>
     )
 }
