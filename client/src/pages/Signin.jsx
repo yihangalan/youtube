@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {BACKEND_URL} from "../utils/backend.js";
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +35,7 @@ const Input = styled.input`
   padding: 10px;
   background-color: transparent;
   width: 100%;
+  color: ${({theme})=>theme.text};
 `
 
 const Button = styled.button`
@@ -60,21 +64,55 @@ const Links = styled.div`
 const Link = styled.span`
     margin-left: 30px;
 `
+const Error = styled.span`
+  background-color: #f44336;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: white;
+  display: ${({text})=>text!==""?"block":"none"}
+`
 
 export default function Signin() {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loginError, setLoginError] = useState("");
+
+    useEffect(()=>{
+        if(loginError !== ""){
+            setTimeout(()=>{
+                setLoginError("");
+            },5000)
+        }
+    },[loginError]);
+
+    const handleLogin = async (e)=>{
+        e.preventDefault();
+        try{
+            const res = await axios.post(BACKEND_URL+"auth/signin",{name,password});
+            console.log(res.data);
+        }catch (err) {
+            console.log(err.response.data.message);
+            setLoginError(err.response.data.message)
+        }
+    }
+
     return (
         <Container>
             <Wrapper>
                 <Title>Sign in</Title>
                 <SubTitle>to continue to YouTube</SubTitle>
-                <Input placeholder={"Username"} type={"text"}/>
-                <Input placeholder={"Password"} type={"password"}/>
-                <Button>Sign in</Button>
+                <Input placeholder={"Username"} type={"text"} onChange={(e)=>setName(e.target.value)}/>
+                <Input placeholder={"Password"} type={"password"} onChange={(e)=>setPassword(e.target.value)}/>
+                <Button onClick={handleLogin}>Sign in</Button>
+                <Error text={loginError}>
+                    {loginError}
+                </Error>
 
                 <Title>OR</Title>
-                <Input placeholder={"Username"} type={"text"}/>
-                <Input placeholder={"Email"} type={"text"}/>
-                <Input placeholder={"Password"} type={"password"}/>
+                <Input placeholder={"Username"} type={"text"} onChange={(e)=>setName(e.target.value)}/>
+                <Input placeholder={"Email"} type={"text"} onChange={(e)=>setEmail(e.target.value)}/>
+                <Input placeholder={"Password"} type={"password"} onChange={(e)=>setPassword(e.target.value)}/>
                 <Button>Sign up</Button>
             </Wrapper>
             <More>

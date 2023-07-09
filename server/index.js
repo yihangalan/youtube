@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser'
+import cors from "cors";
 
 import userRouter from './routes/users.js';
 import videoRouter from './routes/videos.js';
@@ -19,6 +20,7 @@ const connect =()=> {
     });
 }
 
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
