@@ -4,6 +4,8 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import youtube from "../img/youtube.png";
 import {Link} from "react-router-dom";
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import {useSelector} from "react-redux";
+import {VideoCallOutlined} from "@mui/icons-material";
 
 
 const Container = styled.div`
@@ -76,12 +78,28 @@ const MenuButton = styled.div`
   border-radius: 50%;
   &:hover{
     background-color: ${({theme})=>theme.soft};
-    
   }
 `
 
+const User = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: ${({theme})=>theme.text};
+`
+
+const Avatar = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #999;
+`
+
+
 
 export default function Navbar({switchmenubutton, setSwitchmenubutton}){
+    const {currentUser} = useSelector(state=>state.user)
 
     return(
         <Container>
@@ -102,11 +120,18 @@ export default function Navbar({switchmenubutton, setSwitchmenubutton}){
                     <Input placeholder="Search"></Input>
                     <SearchOutlinedIcon></SearchOutlinedIcon>
                 </Search>
-                <Link to={"/signin"}>
-                    <Button>
-                        <AccountCircleOutlinedIcon/>SIGN IN
-                    </Button>
-                </Link>
+                {currentUser?
+                    <User>
+                        <VideoCallOutlined></VideoCallOutlined>
+                        <Avatar></Avatar>
+                        {currentUser.name}
+                    </User>
+                    :
+                    <Link to={"/signin"}>
+                        <Button>
+                            <AccountCircleOutlinedIcon/>SIGN IN
+                        </Button>
+                    </Link>}
             </Wrapper>
         </Container>
     )

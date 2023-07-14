@@ -2,6 +2,8 @@ import styled from "styled-components";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {BACKEND_URL} from "../utils/backend.js";
+import {useDispatch} from "react-redux";
+import {loginFailure, loginStart, loginSuccess} from "../redux/userSlice.js";
 
 const Container = styled.div`
   display: flex;
@@ -77,6 +79,7 @@ export default function Signin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loginError, setLoginError] = useState("");
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         if(loginError !== ""){
@@ -88,12 +91,14 @@ export default function Signin() {
 
     const handleLogin = async (e)=>{
         e.preventDefault();
+        dispatch(loginStart())
         try{
             const res = await axios.post(BACKEND_URL+"auth/signin",{name,password});
-            console.log(res.data);
+            dispatch(loginSuccess(res.data));
         }catch (err) {
             console.log(err.response.data.message);
             setLoginError(err.response.data.message)
+            dispatch(loginFailure())
         }
     }
 
