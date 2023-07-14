@@ -93,7 +93,15 @@ export default function Signin() {
         e.preventDefault();
         dispatch(loginStart())
         try{
-            const res = await axios.post(BACKEND_URL+"auth/signin",{name,password});
+            // const res = await axios.post(BACKEND_URL+"auth/signin",{name,password});
+            const res = await axios.post(BACKEND_URL + "auth/signin", {
+                name,
+                password
+            }, {
+                withCredentials: true
+            });
+
+            console.log(res.data);
             dispatch(loginSuccess(res.data));
         }catch (err) {
             console.log(err.response.data.message);

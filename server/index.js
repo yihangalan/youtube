@@ -19,9 +19,15 @@ const connect =()=> {
         throw err;
     });
 }
+let corsOptions = {
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+    maxAge: '1728000'
+};
+app.use(cors(corsOptions));
 
-app.use(cors());
 app.use(cookieParser());
+
 app.use(express.json());
 
 app.use("/api/auth", authRouter);

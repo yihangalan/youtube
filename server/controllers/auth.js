@@ -29,10 +29,11 @@ export const signin = async (req, res, next) => {
         const {password, ...others} = user._doc;
 
         res.cookie("access_token", token, {
-            // httpOnly: true
-        }).status(200)
-            .json(others)
-        console.log(req.cookies);
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+        }).status(200).json(others);
+
     }catch (err){
         next(err)
     }
