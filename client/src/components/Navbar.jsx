@@ -123,7 +123,7 @@ export default function Navbar({switchmenubutton, setSwitchmenubutton}){
                 {currentUser?
                     <User>
                         <VideoCallOutlined></VideoCallOutlined>
-                        <Avatar></Avatar>
+                        <Avatar src={currentUser.img}></Avatar>
                         {currentUser.name}
                     </User>
                     :

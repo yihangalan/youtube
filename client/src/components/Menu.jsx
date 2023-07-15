@@ -16,7 +16,8 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ModeNightOutlinedIcon from '@mui/icons-material/ModeNightOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {logout} from "../redux/userSlice.js";
 
 const Container = styled.div`
       flex: 1;
@@ -107,6 +108,14 @@ const Title = styled.h2`
 
 export default function Menu({darkMode, setDarkMode, switchmenubutton}){
     const {currentUser} = useSelector(state=>state.user)
+    const dispatch = useDispatch();
+    function handleLogout(){
+        dispatch(logout())
+        console.log(document.cookie);
+
+
+
+    }
 
     return(
         <div>
@@ -193,6 +202,11 @@ export default function Menu({darkMode, setDarkMode, switchmenubutton}){
                         <ModeNightOutlinedIcon/>
                         {darkMode?"Light Mode":"Dark Mode"}
                     </Item>
+
+                    <Hr/>
+
+                    <Button onClick={handleLogout}><AccountCircleOutlinedIcon/>SIGN OUT</Button>
+
                     <Item type="last" style={{height:"30px"}}>
                     </Item>
                 </Wrapper>
