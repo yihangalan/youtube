@@ -3,6 +3,7 @@ import Card from "../components/Card.jsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {BACKEND_URL} from "../utils/backend.js";
+import {useSelector} from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -21,11 +22,15 @@ export default function Home({type}) {
         fetchVideos();
     },[type])
 
+    const {currentUser} = useSelector(state=>state.user)
+
     return(
         <Container>
-            {videos.map((video)=>(
-                <Card key={video._id} video={video}></Card>
-            ))}
+            {type==="sub" && !currentUser? <div>you should log in</div>:
+                videos.map((video)=>(
+                        <Card key={video._id} video={video}></Card>
+                    ))
+            }
 
         </Container>
     )

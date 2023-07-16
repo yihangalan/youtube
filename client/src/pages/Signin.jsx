@@ -120,6 +120,8 @@ export default function Signin() {
                     name: result.user.displayName,
                     email: result.user.email,
                     img: result.user.photoURL
+                }, {
+                    withCredentials: true
                 }).then(res =>{
                     dispatch(loginSuccess(res.data));
                 })

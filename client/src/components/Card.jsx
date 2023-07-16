@@ -80,7 +80,7 @@ export default function Card({type, video}){
 
     return(
         <Container type={type}>
-            <Link to={`/video/1`}>
+            <Link to={`/video/${video._id}`}>
                 <Img type={type} src={video.imgUrl}/>
             </Link>
             <Details type={type}>

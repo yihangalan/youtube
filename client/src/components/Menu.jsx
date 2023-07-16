@@ -113,8 +113,6 @@ export default function Menu({darkMode, setDarkMode, switchmenubutton}){
         dispatch(logout())
         console.log(document.cookie);
 
-
-
     }
 
     return(
