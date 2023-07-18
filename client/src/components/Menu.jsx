@@ -17,7 +17,10 @@ import ModeNightOutlinedIcon from '@mui/icons-material/ModeNightOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {logout} from "../redux/userSlice.js";
+import {loginSuccess, logout} from "../redux/userSlice.js";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {BACKEND_URL} from "../utils/backend.js";
 
 const Container = styled.div`
       flex: 1;
@@ -107,13 +110,18 @@ const Title = styled.h2`
 
 
 export default function Menu({darkMode, setDarkMode, switchmenubutton}){
+    axios.defaults.withCredentials = true;
     const {currentUser} = useSelector(state=>state.user)
     const dispatch = useDispatch();
-    function handleLogout(){
-        dispatch(logout())
-        console.log(document.cookie);
 
+    async function handleLogout(){
+        dispatch(loginSuccess(null));
+        await axios.post(BACKEND_URL +"auth/logout")
     }
+
+    useEffect(()=>{
+
+    },[dispatch])
 
     return(
         <div>
@@ -147,7 +155,7 @@ export default function Menu({darkMode, setDarkMode, switchmenubutton}){
                         History
                     </Item>
                     <Hr/>
-                    {!currentUser&&
+                    {(!currentUser)&&
                         <>
                         <Login>
                             Sign in to like videos, comment, and subscribe.

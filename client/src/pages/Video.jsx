@@ -8,7 +8,7 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import Comments from "../components/Comments.jsx";
 import Card from "../components/Card.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {BACKEND_URL} from "../utils/backend.js";
@@ -134,6 +134,7 @@ const Subscribe = styled.button`
     
 `
 export default function Video() {
+    const navigate = useNavigate();
     axios.defaults.withCredentials = true;
     const {currentUser} = useSelector(state=>state.user);
     const {currentVideo} = useSelector(state=>state.video);
@@ -160,20 +161,25 @@ export default function Video() {
     },[path, dispatch]);
 
     const handleLike = async ()=>{
+        if(!currentUser){
+            navigate("/signin");
+            return;
+        }
         await axios.put(BACKEND_URL+"users/like/" + currentVideo._id);
         dispatch(like(currentUser?._id));
     }
 
     const handleDislike = async ()=>{
+        if(!currentUser){
+            navigate("/signin");
+            return;
+        }
         dispatch(dislike(currentUser?._id));
         try {
             await axios.put(BACKEND_URL + "users/dislike/" + currentVideo._id);
-            // 请求成功后无需更新按钮状态，因为 Redux 状态已经更新过了
         } catch (error) {
-            // 请求失败时，还原按钮状态为实际的状态
             dispatch(like(currentVideo._id));
         }
-
     }
 
 
