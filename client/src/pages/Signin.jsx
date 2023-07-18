@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {loginFailure, loginStart, loginSuccess} from "../redux/userSlice.js";
 import {auth, provider} from "../firebase.js";
 import {signInWithPopup} from "firebase/auth";
+import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -77,6 +78,7 @@ const Error = styled.span`
 `
 
 export default function Signin() {
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -102,9 +104,9 @@ export default function Signin() {
             }, {
                 withCredentials: true
             });
-
             console.log(res.data);
             dispatch(loginSuccess(res.data));
+            navigate("/");
         }catch (err) {
             console.log(err.response.data.message);
             setLoginError(err.response.data.message)
@@ -129,6 +131,7 @@ export default function Signin() {
                 dispatch(loginFailure());
                 console.log(err)
             })
+        navigate("/");
     }
 
     return (

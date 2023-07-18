@@ -14,6 +14,7 @@ import axios from "axios";
 import {BACKEND_URL} from "../utils/backend.js";
 import {dislike, fetchFailure, fetchStart, fetchSuccess, like} from "../redux/videoSlice.js";
 import {format} from "timeago.js";
+import {subscription} from "../redux/userSlice.js";
 
 const Container = styled.div`
   display: flex;
@@ -182,6 +183,13 @@ export default function Video() {
         }
     }
 
+    const handleSub = async ()=>{
+        currentUser.subscribedUsers.includes(channel._id)
+            ? await axios.put(BACKEND_URL+"users/unsub/"+channel._id)
+            : await axios.put(BACKEND_URL+"users/sub/"+channel._id);
+        dispatch(subscription(channel._id));
+    }
+
 
 
     return(
@@ -243,7 +251,11 @@ export default function Video() {
                             </Description>
                         </ChannelDetail>
                     </ChannelInfo>
-                    <Subscribe>SUBSCRIBE</Subscribe>
+                    <Subscribe onClick={handleSub}>
+                        {currentUser?.subscribedUsers?.includes(channel._id)
+                        ? "SUBSCRIBED"
+                        : "SUBSCRIBE"}
+                    </Subscribe>
                 </Channel>
                 <Hr></Hr>
                 <Comments></Comments>
