@@ -134,6 +134,13 @@ const Subscribe = styled.button`
   cursor: pointer;
     
 `
+
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100%;
+  object-fit: cover;
+`
+
 export default function Video() {
     const navigate = useNavigate();
     axios.defaults.withCredentials = true;
@@ -184,6 +191,10 @@ export default function Video() {
     }
 
     const handleSub = async ()=>{
+        if(!currentUser){
+            navigate("/signin");
+            return;
+        }
         currentUser.subscribedUsers.includes(channel._id)
             ? await axios.put(BACKEND_URL+"users/unsub/"+channel._id)
             : await axios.put(BACKEND_URL+"users/sub/"+channel._id);
@@ -196,14 +207,15 @@ export default function Video() {
         <Container>
             <Content>
                 <VideoWrapper>
-                    <iframe
-                        width="100%"
-                        height="629"
-                        src="https://www.youtube.com/embed/GrG2-oX5z24"
-                        title="YouTube video player" frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                    ></iframe>
+                    {/*<iframe*/}
+                    {/*    width="100%"*/}
+                    {/*    height="629"*/}
+                    {/*    src="https://www.youtube.com/embed/GrG2-oX5z24"*/}
+                    {/*    title="YouTube video player" frameBorder="0"*/}
+                    {/*    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"*/}
+                    {/*    allowFullScreen*/}
+                    {/*></iframe>*/}
+                    <VideoFrame src={currentVideo.videoUrl} allowFullScreen/>
                 </VideoWrapper>
                 <Title>{currentVideo.title}</Title>
                 <Details>
@@ -258,7 +270,7 @@ export default function Video() {
                     </Subscribe>
                 </Channel>
                 <Hr></Hr>
-                <Comments></Comments>
+                <Comments videoID = {currentVideo._id}></Comments>
             </Content>
             {/*<Recommendation>*/}
             {/*    /!*<Card type="sm"/>*!/*/}

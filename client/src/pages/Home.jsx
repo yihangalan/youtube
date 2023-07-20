@@ -6,6 +6,7 @@ import {BACKEND_URL} from "../utils/backend.js";
 import {useSelector} from "react-redux";
 
 const Container = styled.div`
+  height: 100vh;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;

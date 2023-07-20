@@ -6,6 +6,8 @@ import {Link} from "react-router-dom";
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import {useSelector} from "react-redux";
 import {VideoCallOutlined} from "@mui/icons-material";
+import {useState} from "react";
+import Upload from "./Upload.jsx";
 
 
 const Container = styled.div`
@@ -101,38 +103,42 @@ const Avatar = styled.img`
 export default function Navbar({switchmenubutton, setSwitchmenubutton}){
     const {currentUser} = useSelector(state=>state.user)
 
-    return(
-        <Container>
-            <Wrapper>
+    const [open, setOpen] = useState(false)
 
-                <div style={{display:"flex", alignItems:"center"}}>
-                    <MenuButton onClick={()=>setSwitchmenubutton(!switchmenubutton)}>
-                        <MenuOutlinedIcon></MenuOutlinedIcon>
-                    </MenuButton>
-                    <Link to={'/'} style={{textDecoration: "none", color: "inherit"}}>
-                        <Logo>
-                            <Img src={youtube}></Img>
-                            YouTube
-                        </Logo>
-                    </Link>
-                </div>
-                <Search>
-                    <Input placeholder="Search"></Input>
-                    <SearchOutlinedIcon></SearchOutlinedIcon>
-                </Search>
-                {currentUser?
-                    <User>
-                        <VideoCallOutlined></VideoCallOutlined>
-                        <Avatar src={currentUser.img}></Avatar>
-                        {currentUser.name}
-                    </User>
-                    :
-                    <Link to={"/signin"}>
-                        <Button>
-                            <AccountCircleOutlinedIcon/>SIGN IN
-                        </Button>
-                    </Link>}
-            </Wrapper>
-        </Container>
+    return(
+        <>
+            <Container>
+                <Wrapper>
+                    <div style={{display:"flex", alignItems:"center"}}>
+                        <MenuButton onClick={()=>setSwitchmenubutton(!switchmenubutton)}>
+                            <MenuOutlinedIcon></MenuOutlinedIcon>
+                        </MenuButton>
+                        <Link to={'/'} style={{textDecoration: "none", color: "inherit"}}>
+                            <Logo>
+                                <Img src={youtube}></Img>
+                                YouTube
+                            </Logo>
+                        </Link>
+                    </div>
+                    <Search>
+                        <Input placeholder="Search"></Input>
+                        <SearchOutlinedIcon></SearchOutlinedIcon>
+                    </Search>
+                    {currentUser?
+                        <User>
+                            <VideoCallOutlined onClick={()=>setOpen(true)}></VideoCallOutlined>
+                            <Avatar src={currentUser.img}></Avatar>
+                            {currentUser.name}
+                        </User>
+                        :
+                        <Link to={"/signin"}>
+                            <Button>
+                                <AccountCircleOutlinedIcon/>SIGN IN
+                            </Button>
+                        </Link>}
+                </Wrapper>
+            </Container>
+            {open && <Upload setOpen={setOpen}/>}
+        </>
     )
 }

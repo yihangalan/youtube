@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {BACKEND_URL} from "../utils/backend.js";
+import {format} from "timeago.js";
 
 const Container = styled.div`
   display: flex;
@@ -34,17 +38,31 @@ const Text = styled.span`
     
 `
 
-export default function Comment() {
+export default function Comment({comment}){
+    const [channel, setChannel] = useState({});
+
+    useEffect(()=> {
+        const fetchChannel = async () => {
+            try{
+                const res = await axios.get(BACKEND_URL+"users/find/"+comment.userID);
+                setChannel(res.data);
+            }catch (e){
+                console.log(e)
+            }
+        }
+        fetchChannel();
+
+    }, [comment]);
+
     return(
         <Container>
-            <Avatar src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhneTAc_3_X-4kBhIOZZorsNxrxLyGoMnuQA&usqp=CAU"></Avatar>
+            <Avatar src={channel.img}></Avatar>
             <Details>
-                <Name>Lisa
-                    <Date>3 days ago</Date>
+                <Name>{channel.name}
+                    <Date>{format(comment.createdAt)}</Date>
                 </Name>
                 <Text>
-                    To anybody who's reading this, I pray that whatever is hurting you or whatever you are constantly
-                    stressing about gets better.
+                    {comment.desc}
                 </Text>
             </Details>
         </Container>
