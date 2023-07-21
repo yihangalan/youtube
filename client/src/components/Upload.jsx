@@ -95,7 +95,7 @@ const Upload = ({setOpen}) => {
             (snapshot) => {
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                urlType === "img" ? setImgPercentage(progress) : setVideoPercentage(progress);
+                urlType === "imgUrl" ? setImgPercentage(progress) : setVideoPercentage(progress);
                 switch (snapshot.state) {
                     case 'paused':
                         console.log('Upload is paused');
@@ -152,7 +152,7 @@ const Upload = ({setOpen}) => {
                 <Label>Video:</Label>
 
                 {videoPercentage>0
-                    ?("Uploading" + videoPercentage+ "%" )
+                    ?("Uploading" + videoPercentage + "%" )
                     : <Input type="file" accept="video/*" onChange={e => setVideo(e.target.files[0])}/>
                 }
 
