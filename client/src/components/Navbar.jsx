@@ -2,7 +2,7 @@ import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined.js";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import youtube from "../img/youtube.png";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import {useSelector} from "react-redux";
 import {VideoCallOutlined} from "@mui/icons-material";
@@ -102,8 +102,9 @@ const Avatar = styled.img`
 
 export default function Navbar({switchmenubutton, setSwitchmenubutton}){
     const {currentUser} = useSelector(state=>state.user)
-
+    const [query, setQuery] = useState("")
     const [open, setOpen] = useState(false)
+    const navigate = useNavigate();
 
     return(
         <>
@@ -121,8 +122,8 @@ export default function Navbar({switchmenubutton, setSwitchmenubutton}){
                         </Link>
                     </div>
                     <Search>
-                        <Input placeholder="Search"></Input>
-                        <SearchOutlinedIcon></SearchOutlinedIcon>
+                        <Input placeholder="Search" onChange={e=>setQuery(e.target.value)}></Input>
+                        <SearchOutlinedIcon onClick={()=> navigate(`/search?q=${query}`)}></SearchOutlinedIcon>
                     </Search>
                     {currentUser?
                         <User>

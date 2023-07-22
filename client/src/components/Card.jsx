@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {format} from "timeago.js";
 import {useEffect, useState} from "react";
 import axios from "axios";
@@ -68,7 +68,7 @@ const Info = styled.div`
 `
 
 export default function Card({type, video}){
-
+    const navigate = useNavigate();
     const [channel, setChannel] = useState({})
     useEffect(() => {
         const fetchChannel = async () => {
@@ -80,9 +80,9 @@ export default function Card({type, video}){
 
     return(
         <Container type={type}>
-            <Link to={`/video/${video._id}`}>
-                <Img type={type} src={video.imgUrl}/>
-            </Link>
+            {/*<Link to={`/video/${video._id}`}>*/}
+            <Img onClick={()=> navigate(`/video/${video._id}`)} type={type} src={video.imgUrl}/>
+            {/*</Link>*/}
             <Details type={type}>
                 <ChannelImg type={type} src={channel.img}></ChannelImg>
                 <Texts>

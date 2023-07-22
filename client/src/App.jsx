@@ -8,6 +8,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Video from "./pages/Video.jsx";
 import Signin from "./pages/Signin";
+import Search from "./pages/Search.jsx";
 
 const Container = styled.div`
         display: flex;
@@ -19,10 +20,11 @@ const Main = styled.div`
       background-color: ${({theme})=>theme.bg};
 `
 const Wrapper = styled.div`
-        padding: 22px 90px;
+        padding: 22px 30px;
 `
 const SwitchBlock = styled.div`
-    min-width: ${({switchmenubutton})=>switchmenubutton==="false" ? "0":"230px"};
+    min-width: ${({switchmenubutton})=>switchmenubutton==="false" ? "90px":"230px"};
+    background-color: ${({theme})=>theme.bg};
 `
 
 
@@ -62,6 +64,8 @@ function App() {
                                 <Route path={"subscriptions"} element={<Home type="sub"></Home>}></Route>
                                 <Route path='signin' element={<Signin></Signin>}/>
                                 <Route path='video/:id' element={<Video></Video>}/>
+                                <Route path='search' element={<Search></Search>}/>
+
                             </Route>
                         </Routes>
                     </Wrapper>

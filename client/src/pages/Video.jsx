@@ -15,8 +15,10 @@ import {BACKEND_URL} from "../utils/backend.js";
 import {dislike, fetchFailure, fetchStart, fetchSuccess, like} from "../redux/videoSlice.js";
 import {format} from "timeago.js";
 import {subscription} from "../redux/userSlice.js";
+import Recommendation from "../components/Recommendation.jsx";
 
 const Container = styled.div`
+  height: 100vh;
   display: flex;
   gap: 24px;
 `
@@ -85,10 +87,6 @@ const Hr = styled.hr`
   margin: 15px 0;
   border: 0.5px solid ${({theme})=>theme.soft};
   
-`
-
-const Recommendation = styled.div`
-    flex: 2;
 `
 
 const Channel = styled.div`
@@ -215,7 +213,7 @@ export default function Video() {
                     {/*    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"*/}
                     {/*    allowFullScreen*/}
                     {/*></iframe>*/}
-                    <VideoFrame src={currentVideo.videoUrl} allowFullScreen/>
+                    <VideoFrame src={currentVideo.videoUrl} allowFullScreen controls/>
                 </VideoWrapper>
                 <Title>{currentVideo.title}</Title>
                 <Details>
@@ -272,20 +270,7 @@ export default function Video() {
                 <Hr></Hr>
                 <Comments videoID = {currentVideo._id}></Comments>
             </Content>
-            {/*<Recommendation>*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*    /!*<Card type="sm"/>*!/*/}
-            {/*</Recommendation>*/}
+            <Recommendation tags={currentVideo.tags}/>
         </Container>
     )
 }

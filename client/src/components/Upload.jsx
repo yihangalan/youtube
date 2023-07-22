@@ -2,6 +2,9 @@ import styled from "styled-components";
 import {useEffect, useState} from "react";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../firebase.js";
+import axios from "axios";
+import {BACKEND_URL} from "../utils/backend.js";
+import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -69,12 +72,16 @@ const Label = styled.label`
 `
 
 const Upload = ({setOpen}) => {
+    axios.defaults.withCredentials = true;
+
     const [img, setImg] = useState(null);
     const [video, setVideo] = useState(null);
     const [imgPercentage, setImgPercentage] = useState(0);
     const [videoPercentage, setVideoPercentage] = useState(0);
     const [inputs, setInputs] = useState({});
     const [tags, setTags] = useState([]);
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setInputs({...inputs, [e.target.name]: e.target.value})
@@ -95,7 +102,9 @@ const Upload = ({setOpen}) => {
             (snapshot) => {
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                urlType === "imgUrl" ? setImgPercentage(progress) : setVideoPercentage(progress);
+                urlType === "imgUrl"
+                    ? setImgPercentage(Math.round(progress))
+                    : setVideoPercentage(Math.round(progress));
                 switch (snapshot.state) {
                     case 'paused':
                         console.log('Upload is paused');
@@ -143,29 +152,36 @@ const Upload = ({setOpen}) => {
         img && uploadFile(img, "imgUrl");
     },[img])
 
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        const res = await axios.post(BACKEND_URL + "videos", {...inputs, tags});
+        setOpen(false);
+        res.status === 200 && navigate("/video/" + res.data._id);
+    }
+
 
     return (
         <Container>
             <Wrapper>
                 <Close onClick={()=>setOpen(false)}>X</Close>
-                <Title name="title" onChange={handleChange}>Upload a New Video</Title>
+                <Title>Upload a New Video</Title>
                 <Label>Video:</Label>
 
                 {videoPercentage>0
-                    ?("Uploading" + videoPercentage + "%" )
+                    ?("Uploading " + videoPercentage + "%" )
                     : <Input type="file" accept="video/*" onChange={e => setVideo(e.target.files[0])}/>
                 }
 
-                <Input type="text" placeholder="Title"/>
+                <Input name="title" onChange={handleChange} type="text" placeholder="Title"/>
                 <Desc name="desc" onChange={handleChange} placeholder="Description" rows={8}/>
                 <Input onChange={handleTags} type="text" placeholder="Separate the tags with commas."/>
                 <Label>Image:</Label>
 
                 {imgPercentage>0
-                    ?("Uploading" + imgPercentage + "%" )
+                    ?("Uploading " + imgPercentage + "%" )
                     : <Input type="file" accept="image/*" onChange={e=>setImg(e.target.files[0])}/>
                 }
-                <Button>Upload</Button>
+                <Button onClick={handleUpload}>Upload</Button>
             </Wrapper>
         </Container>
     );
